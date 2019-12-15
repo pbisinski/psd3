@@ -6,6 +6,7 @@ import com.psd3.model.offer.OfferRequest
 import com.psd3.model.offer.Offers
 import com.psd3.data.DatabaseFactory.dbQuery
 import com.psd3.data.repository.OffersRepository
+import com.psd3.utils.toFormattedString
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -36,8 +37,11 @@ class OffersSource : OffersRepository {
         return dbQuery {
             Offers.insert {
                 it[name] = newOffer.name ?: throw MissingArgumentException("name")
+                it[ownerId] = newOffer.ownerId ?: throw MissingArgumentException("ownerId")
                 it[description] = newOffer.description ?: throw MissingArgumentException("description")
-                it[dateCreated] = DateTime.now()
+                it[location] = newOffer.location ?: throw MissingArgumentException("location")
+                it[category] = newOffer.category ?: throw MissingArgumentException("category")
+                it[dateCreated] = DateTime.now().toFormattedString()
             } get (Offers.id)
         }.toString()
     }
